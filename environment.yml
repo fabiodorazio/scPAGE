@@ -1,0 +1,16 @@
+name: scPAGE
+channels:
+  - defaults
+  - bioconda
+  - conda-forge
+dependencies:
+  - pip=23.3.1=py311h06a4308_0
+  - pip:
+      - pandas==1.5.3
+      - seaborn==0.13.2
+      - scanpy==1.10.2
+      - scvi-tools==1.1.5
+      - scipy==1.14.0
+      - biopython==1.83
+      - bioframe==0.7.2
+      - scikit-misc==0.1.4
