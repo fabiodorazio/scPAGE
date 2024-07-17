@@ -25,25 +25,28 @@ conda env create -f environment.yml
 4. Start scPAGE with the following command:
 
 ```bash
-python3 main.py ../assets/ ../assets/genome.fa.gz ../assets/amplicon_coordinates.bed -n Mut_Signatures_Combined_Amplicons --mutational-signatures --combine-amplicons --gene-overlaps
+python3 __main.py__
 ```
 
 ## Pipeline Summary
 
-The following 3 arguments are mandatory for scPAGE:
+The following are the arguments required for scPAGE:
 
-1. "input_amp"    >  "Input amplicon sequences in fasta format"
-2. "reference"    >  "Input reference genome in fasta format"
-3. "coordinates"  >  "A bed file containing the coordinates of each amplicon"
-
-The following 6 arguments are optional:
-
-1. "-n","name"                  >  "Output file name without the format: can be the name of the analysis, individual, date, etc..."
-2. "-qc", "qcmode"              >  "If provided, runs the program in qc-mode only and does not perform the alignment"
-3. "-o", est="output_dir"       >  "Output directory path"
-4. "--combine-amplicons"        >  "If provided, combines amplicons based on coordinates and basenames"
-5. "--mutational-signatures"    >  "If provided, estimates the type of mutational signature"
-6. "--gene-overlaps"            >  "Provide gene coordinates to identify the ensembl ID of the gene where the mutation is found"
+1. "RawInputPath"           >       "File path for Cell Ranger outputs"
+2. "Gtf"                    >       "File path for Gtf file"
+3. "RiboUrl"                >       "This must be a link to a txt file containing a list of ribosomal RNA"
+4. "-n"                     >       "Output file name without the extension"
+5. "-o"                     >       "Output directory path"
+6. "--subset"               >       "If true, the count matrix is reduced in size. Used for testing"
+7. "--subset-n"             >       "Integer for number of cells kept from count matrix. Used for testing"
+8. "--subset-sg"            >       "If true, sgRNA table is reduced"
+9. "--umi-threshold"        >       "Minimum threshold for sgRNA UMI"
+10. "--subset-sg-n"         >       "Number of sgRNA to keep"
+11. "--convert-ids"         >       "If true, convert IDs to gene names"
+12. "--id-lookup"           >       "List of genes for subsetting the sgRNA table"
+13. "--percentile-choice"   >       "Percentile for counts to keep"
+14. "--mito-filter"         >       "Percent threshold for mitochondrial RNA removal"
+15. "--ribo-filter"         >       "Percent threshold for ribosomal RNA removal"
 
 ## Description and Steps
 
@@ -65,20 +68,17 @@ scPAGE starts by importing the required files provided by the user. It performs 
 > Use the gene names tables to map the ENSEMBL IDs to gene names
 > Assign arbitrary gene names to controls (e.i CONTROL1)
 > Subset sgRNA table for genes of interest (e.i. rejuvination factors)
-> Subset each count table for all samples by cell IDs remaining is sgRNA table
+> Subset each count table for all samples by cell IDs remaining in the sgRNA table
 > Create final table for perturbation analysis:
-- Aggregate counts for each gene in cells with same target sgRNA
+- Keep only genes expressed in all samples
 - Combine conditions and replicates in a single table
 
 3. Perturbation analysis
 > Reads are normalised by total number of reads per cell
 > The mean read count for cells in the same condition and sgRNA groups is calculated
 > Dimensionality reduction is performed with PCA to identify those genes with the highest variance between conditions
-> Fit a Gaussian on 
-
-
-PerturbAnalyser aims to perform a simple mutational signature convertion. This is particularly important for cancer samples where the origin is uncertain.
-
-If target gene/exons coordinates are provided, each mutation can be mapped back and labelled with the gene and exons where it belongs.
-
-Finally, the mutation frequency is calculated for substitutions or signatures and graphics are generated
+> For every condition:
+- Fit a normal distribution on the control gene
+- Use the parameters of the normal distribution (mean and sd) to test significance between Target and control sgRNA
+- Correct p-values using False Discovery Rate
+- Plot genes by adjusted p-values
