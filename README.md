@@ -4,7 +4,7 @@
 
 ## Introduction
 
-The purpose of this exercise is to perform a general analysis of the CROP-seq dataset provided by [`Tian et al., 2019`](https://www.sciencedirect.com/science/article/pii/S0896627319306403). In this publication the authors per1formed scRNA-seq combined with CRISPR perturbation during iPSC to neuron transition to interrogate the genes necessary for neuronal survival and functioning.
+A program to perform a general analysis of the CROP-seq dataset provided by [`Tian et al., 2019`](https://www.sciencedirect.com/science/article/pii/S0896627319306403). In this publication the authors per1formed scRNA-seq combined with CRISPR perturbation during iPSC to neuron transition to interrogate the genes necessary for neuronal survival and functioning.
 
 scPAGE (single cell Perturbation Analysis Gene Expression) aims to perform the necessary steps to generate a list of significantly differentially regulated genes in CRISPR perturbation experiments.
 Due to memory and time limitations, adjustments to the pipelines have been made to trim the datasets. It is therefore important to consider this as an exercise and not a comprhensive analysis for research discoveries.
