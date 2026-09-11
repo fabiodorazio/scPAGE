@@ -6,6 +6,8 @@ import time
 import import_combine as imp
 import perturbation as pert
 import perturbation_preprocessing as ppr
+import perturbation_embeddings as pemb
+
 from utils import create_logger, get_basename, check_output_dir
 from pathlib import Path
 
@@ -184,5 +186,17 @@ if __name__ == "__main__":
                         PERCENTILE = 99)
     # run perturbation significance analysis and generate the graph
     pert.significant_perturbation(df_guide, va_genes, out_dir_table)
+
+    # Run perturnation embeddings
+    ################### PERTURBATION EMBEDDINGS ###################
+    embedding_results = pemb.perturbation_embeddings(
+        MATRIX=final_combined,
+        OUT_DIR=out_dir_table,
+        OUT_PLOT_DIR=output_plot_dir,
+        VA_GENES=None,
+        CONTROL_LABEL="Control",
+        AGGREGATION="median",
+        MIN_CELLS=3,
+        TOP_NEIGHBORS=5)
 
 
